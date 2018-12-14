@@ -1,26 +1,11 @@
 package com.example.registrationservicesample;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.gcp.pubsub.core.PubSubTemplate;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 @SpringBootApplication
 public class RegistrationServiceSampleApplication implements CommandLineRunner {
-
-  private static final Logger LOGGER = LoggerFactory
-      .getLogger(RegistrationServiceSampleApplication.class);
-
-  @Autowired
-  PubSubTemplate pubSubTemplate;
-
-  @Autowired
-  JdbcTemplate jdbcTemplate;
 
   public static void main(String[] args) {
     SpringApplication.run(RegistrationServiceSampleApplication.class, args);
@@ -31,12 +16,8 @@ public class RegistrationServiceSampleApplication implements CommandLineRunner {
 
     // STEP 1: Read messages from Pub/Sub subscription "registrations-subscription".
     //         For each message, acknowledge it, and call processNewMessagePayload.
-    pubSubTemplate.subscribeAndConvert("registrations-subscription", message ->
-        {
-          message.ack();
-          processNewMessagePayload(message.getPayload());
-        },
-        String.class);
+    System.out.println("STEP 1: Not completed yet.");
+
 
   }
 
@@ -53,10 +34,11 @@ public class RegistrationServiceSampleApplication implements CommandLineRunner {
       // STEP 2: Log the Stackdriver Logging that you processed the message.
       //         The message should something like:
       //         "Processed registration for <john@doe.com> John Doe."
-      LOGGER.info("Processed registration for <{}> {} {}.", email, firstName, lastName);
+      System.out.println("STEP 2: Not completed yet.");
+
 
     } else {
-      LOGGER.warn("Skipping message '" + messagePayload
+      throw new IllegalArgumentException("Skipping message '" + messagePayload
           + "' because it's not in the format [email];[first-name];[last-name]");
     }
 
@@ -67,8 +49,7 @@ public class RegistrationServiceSampleApplication implements CommandLineRunner {
 
     // STEP 4: Save the registration in Cloud SQL - MySQL database.
     // Query might look something like "INSERT INTO registrants (email, first_name, last_name) VALUES (?, ?, ?)"
-    jdbcTemplate
-        .update("INSERT INTO registrations (email, first_name, last_name) VALUES (?, ?, ?)", email,
-            firstName, lastName);
+    System.out.println("STEP 4: Not completed yet.");
+
   }
 }
