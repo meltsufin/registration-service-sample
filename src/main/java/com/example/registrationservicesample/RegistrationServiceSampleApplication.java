@@ -2,14 +2,13 @@ package com.example.registrationservicesample;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.gcp.pubsub.core.PubSubTemplate;
-import org.springframework.cloud.gcp.pubsub.support.converter.ConvertedBasicAcknowledgeablePubsubMessage;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Controller;
 
 @SpringBootApplication
 public class RegistrationServiceSampleApplication implements CommandLineRunner {
@@ -28,14 +27,21 @@ public class RegistrationServiceSampleApplication implements CommandLineRunner {
   }
 
   @Override
-  public void run(String... args) throws Exception {
+  public void run(String... args) {
 
-    pubSubTemplate.subscribeAndConvert("registrations-subscription", this::processNewMessage,
+    // STEP 1: Read messages from Pub/Sub subscription "registrations-subscription".
+    //         For each message, acknowledge it, and call processNewMessagePayload.
+    pubSubTemplate.subscribeAndConvert("registrations-subscription", message ->
+        {
+          message.ack();
+          processNewMessagePayload(message.getPayload());
+        },
         String.class);
+
   }
 
-  private void processNewMessage(ConvertedBasicAcknowledgeablePubsubMessage<String> message) {
-    String[] registration = message.getPayload().split(";");
+  private void processNewMessagePayload(String messagePayload) {
+    String[] registration = messagePayload.split(";");
 
     if (registration.length == 3) {
       String email = registration[0];
@@ -44,19 +50,25 @@ public class RegistrationServiceSampleApplication implements CommandLineRunner {
 
       saveRegistrationInDb(email, firstName, lastName);
 
+      // STEP 2: Log the Stackdriver Logging that you processed the message.
+      //         The message should something like:
+      //         "Processed registration for <john@doe.com> John Doe."
       LOGGER.info("Processed registration for <{}> {} {}.", email, firstName, lastName);
 
     } else {
-      LOGGER.warn("Skipping message '" + message.getPayload()
+      LOGGER.warn("Skipping message '" + messagePayload
           + "' because it's not in the format [email];[first-name];[last-name]");
     }
 
-    message.ack();
+
   }
 
   private void saveRegistrationInDb(String email, String firstName, String lastName) {
+
+    // STEP 4: Save the registration in Cloud SQL - MySQL database.
+    // Query might look something like "INSERT INTO registrants (email, first_name, last_name) VALUES (?, ?, ?)"
     jdbcTemplate
-        .update("INSERT INTO registrants (email, first_name, last_name) VALUES (?, ?, ?)", email,
+        .update("INSERT INTO registrations (email, first_name, last_name) VALUES (?, ?, ?)", email,
             firstName, lastName);
   }
 }
