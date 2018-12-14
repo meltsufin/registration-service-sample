@@ -1,11 +1,17 @@
 package com.example.registrationservicesample;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class RegistrationServiceSampleApplication implements CommandLineRunner {
+
+  private static final Log LOGGER = LogFactory.getLog(RegistrationServiceSampleApplication.class);
 
   public static void main(String[] args) {
     SpringApplication.run(RegistrationServiceSampleApplication.class, args);
@@ -31,11 +37,7 @@ public class RegistrationServiceSampleApplication implements CommandLineRunner {
 
       saveRegistrationInDb(email, firstName, lastName);
 
-      // STEP 2: Log to Stackdriver Logging that you processed the message.
-      //         The message should something like:
-      //         "Processed registration for <john@doe.com> John Doe."
-      System.out.println("STEP 2: Not completed yet.");
-
+      LOGGER.info("Processed registration for <" + email + "> " + firstName + " " + lastName + ".");
 
     } else {
       throw new IllegalArgumentException("Skipping message '" + messagePayload
@@ -47,7 +49,7 @@ public class RegistrationServiceSampleApplication implements CommandLineRunner {
 
   private void saveRegistrationInDb(String email, String firstName, String lastName) {
 
-    // STEP 4: Save the registration in Cloud SQL - MySQL database.
+    // STEP 2: Save the registration in Cloud SQL - MySQL database.
     // Query might look something like "INSERT INTO registrants (email, first_name, last_name) VALUES (?, ?, ?)"
     System.out.println("STEP 4: Not completed yet.");
 
