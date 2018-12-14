@@ -31,7 +31,7 @@ public class RegistrationServiceSampleApplication implements CommandLineRunner {
 
       saveRegistrationInDb(email, firstName, lastName);
 
-      // STEP 2: Log the Stackdriver Logging that you processed the message.
+      // STEP 2: Log to Stackdriver Logging that you processed the message.
       //         The message should something like:
       //         "Processed registration for <john@doe.com> John Doe."
       System.out.println("STEP 2: Not completed yet.");
