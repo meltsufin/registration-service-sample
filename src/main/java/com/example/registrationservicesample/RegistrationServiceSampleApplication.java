@@ -49,9 +49,6 @@ public class RegistrationServiceSampleApplication implements CommandLineRunner {
 
       saveRegistrationInDb(email, firstName, lastName);
 
-      // STEP 2: Log to Stackdriver Logging that you processed the message.
-      //         The message should something like:
-      //         "Processed registration for <john@doe.com> John Doe."
       LOGGER.info("Processed registration for <" + email + "> " + firstName + " " + lastName + ".");
 
     } else {
@@ -64,7 +61,7 @@ public class RegistrationServiceSampleApplication implements CommandLineRunner {
 
   private void saveRegistrationInDb(String email, String firstName, String lastName) {
 
-    // STEP 4: Save the registration in Cloud SQL - MySQL database.
+    // STEP 2: Save the registration in Cloud SQL - MySQL database.
     // Query might look something like "INSERT INTO registrants (email, first_name, last_name) VALUES (?, ?, ?)"
     jdbcTemplate
         .update("INSERT INTO registrations (email, first_name, last_name) VALUES (?, ?, ?)", email,
