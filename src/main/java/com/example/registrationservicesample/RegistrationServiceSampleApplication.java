@@ -1,7 +1,7 @@
 package com.example.registrationservicesample;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -13,8 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 @SpringBootApplication
 public class RegistrationServiceSampleApplication implements CommandLineRunner {
 
-  private static final Logger LOGGER = LoggerFactory
-      .getLogger(RegistrationServiceSampleApplication.class);
+  private static final Log LOGGER = LogFactory.getLog(RegistrationServiceSampleApplication.class);
 
   @Autowired
   PubSubTemplate pubSubTemplate;
@@ -50,13 +49,13 @@ public class RegistrationServiceSampleApplication implements CommandLineRunner {
 
       saveRegistrationInDb(email, firstName, lastName);
 
-      // STEP 2: Log the Stackdriver Logging that you processed the message.
+      // STEP 2: Log to Stackdriver Logging that you processed the message.
       //         The message should something like:
       //         "Processed registration for <john@doe.com> John Doe."
-      LOGGER.info("Processed registration for <{}> {} {}.", email, firstName, lastName);
+      LOGGER.info("Processed registration for <" + email + "> " + firstName + " " + lastName + ".");
 
     } else {
-      LOGGER.warn("Skipping message '" + messagePayload
+      throw new IllegalArgumentException("Skipping message '" + messagePayload
           + "' because it's not in the format [email];[first-name];[last-name]");
     }
 
