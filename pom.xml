@@ -33,6 +33,30 @@
 
 		<!-- Spring Cloud GCP starter dependencies go here -->
 
+		<!-- STEP 1: Add the dependency below for PubSubTemplate -->
+		<!--
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-gcp-starter-pubsub</artifactId>
+		</dependency>
+		-->
+
+		<!-- STEP 2: Add the dependency below for Cloud SQL support -->
+		<!--
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-gcp-starter-sql-mysql</artifactId>
+		</dependency>
+		-->
+
+		<!-- STEP 3: Add the dependency below for Stackdriver Logging support -->
+		<!--
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-gcp-starter-logging</artifactId>
+		</dependency>
+		-->
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
